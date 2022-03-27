@@ -1,13 +1,16 @@
 package model;
 
 import javax.swing.ImageIcon;
+import java.util.Observable;
 
-
-public class FigureModel 
+public class FigureModel extends Observable
 {
+    private ImageIcon img = null;
+    private String cap = null;
+
     public ImageIcon getImage() {
-	//TODO
-	return null;
+        //Returns the Figure Models' image
+        return img;
     }
 
     /**
@@ -18,12 +21,18 @@ public class FigureModel
      * @throws IllegalArgumentException if the ImageIcon is null
      */
     public void setImage(ImageIcon newImage) {
-	//TODO
+        //Sets the Figure Models' image
+        if (newImage == null){
+            throw new IllegalArgumentException("Image must be non-null!");
+        }
+        img = newImage;
+        setChanged();
+        notifyObservers();
     }
 
     public String getCaption() {
-	//TODO
-	return null;
+        //Returns the Figure Models' caption
+        return cap;
     }
 
     /**
@@ -34,7 +43,16 @@ public class FigureModel
      * @throws IllegalArgumentException if the String is null or empty
      */
     public void setCaption(String newCaption) {
-	//TODO
+        //Sets the Figure Models' caption
+        if (newCaption == null){
+            throw new IllegalArgumentException("Caption must be non-null!");
+        }
+        if (newCaption.equals("")){
+            throw new IllegalArgumentException("Caption must be non-empty!");
+        }
+        cap = newCaption;
+        setChanged();
+        notifyObservers(newCaption);
     }
 
     /**
@@ -45,7 +63,7 @@ public class FigureModel
      * @return True if this figure is complete and false otherwise
      */
     public boolean isComplete() {
-	//TODO
-	return false;
+        //Returns whether the figure is complete
+        return (img != null && cap != null);
     }
 }
