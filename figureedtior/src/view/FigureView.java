@@ -8,14 +8,16 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Icon;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 
 import model.FigureModel;
 import controller.FigureController;
+import java.util.Observer;
+import java.util.Observable;
 
-
-public class FigureView implements View
+public class FigureView implements Observer, View
 {
     JPanel figurePanel;
     JLabel imageView;
@@ -23,6 +25,8 @@ public class FigureView implements View
     JLabel captionView;
     JButton editCaptionButton;
 
+	private ImageIcon recent_img;
+	private String recent_cap;
 
     public FigureView() {
 	super();
@@ -65,12 +69,29 @@ public class FigureView implements View
 	});
     }
 
-    public void update(FigureModel model) {
-	if (model.getImage() != null) {
-	    this.imageView.setIcon(model.getImage());
+	public void update(FigureModel model){
+		if (model.getImage() != null) {
+			this.imageView.setIcon(model.getImage());
+		}
+		if (model.getCaption() != null) {
+			this.captionView.setText(model.getCaption());
+		}
 	}
-	if (model.getCaption() != null) {
-	    this.captionView.setText(model.getCaption());
-	}
+
+	@Override
+    public void update(Observable o, Object input) {
+		if (o instanceof FigureModel){
+			update((FigureModel)o);
+		} else {
+			throw new IllegalArgumentException();
+		}
     }
+
+	public Icon getViewIcon(){
+		return this.imageView.getIcon();
+	}
+
+	public String getViewText(){
+		return this.captionView.getText();
+	}
 }
